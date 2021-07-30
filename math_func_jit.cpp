@@ -37,7 +37,7 @@ void printError(){
    LocalFree(Msg);
 }
 
-int generateSource(string func_str, string &name){
+int generateSource(string func_str, string name){
    name += ".cpp";
    ofstream source_code(name);
    if(source_code.bad()){
@@ -62,7 +62,7 @@ int generateSource(string func_str, string &name){
    return 0;
 }
 
-int generateCompileScript(string &name){
+int generateCompileScript(string name){
    ofstream compile_script(name + ".bat");
    if(compile_script.bad()){
       cout << "failed to open file" << endl;
@@ -70,12 +70,12 @@ int generateCompileScript(string &name){
    }
    compile_script << "call \"C:\\Program Files (x86)\\Microsoft Visual Studio\\2019\\BuildTools\\VC\\Auxiliary\\Build\\vcvars64.bat\"" << endl;
    compile_script << "cd C:\\Users\\caleb\\Documents\\Projects\\MathFuncJIT" << endl;
-   compile_script << "cl -W3 -EHsc -Fe:FuncLibrary.dll " << name << " -link -DLL" << endl;
+   compile_script << "cl -W3 -EHsc -Fe:FuncLibrary.dll " << name << ".cpp -link -DLL" << endl;
    compile_script.close();
    return 0;
 }
 
-int compileSource(string &script_name){
+int compileSource(string script_name){
    system(script_name.c_str());
 
    FILE *check_valid;
@@ -87,23 +87,24 @@ int compileSource(string &script_name){
    return 0;
 }
 
-int loadFunction(string &name, math_func &mf, HMODULE &func_library){
+int loadFunction(string func_name, math_func &mf, HMODULE &func_library){
    func_library = LoadLibraryA("C:\\Users\\caleb\\Documents\\Projects\\MathFuncJIT\\FuncLibrary.dll");
    if(func_library == NULL){
       cout << "failed to load dll" << endl;
       printError();
       return -1;
    }
-   mf = (math_func)GetProcAddress(func_library, name.c_str());
+   mf = (math_func)GetProcAddress(func_library, func_name.c_str());
    if(mf == NULL){
       cout << "proc address not found" << endl;
+      printError();
       return -1;
    }
    return 0;
 }
 
 int main(){
-   string func = "e^sin(x) / (x ^ (12.34719 * x))";
+   string func = "sin(x)^2";//"e^sin(x) / (x ^ (12.34719 * x))";
    string name = "my_func";
    math_func f_x;
    HMODULE func_library;
@@ -120,7 +121,7 @@ int main(){
       return -1;
    }
    for(int a = -10000; a<=10000; a++){
-      if(a % 500 == 0) cout << f_x(a);
+      if(a % 500 == 0) cout << f_x(a) << endl;
       else f_x(a);
    }
    int &&test = 0;
