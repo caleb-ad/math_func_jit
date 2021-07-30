@@ -76,25 +76,7 @@ int generateCompileScript(string &name){
 }
 
 int compileSource(string &script_name){
-   LPSTR command = new char[script_name.size() + 4];
-   memcpy(command, string("/c " + script_name).c_str(), script_name.size() + 4);
-   STARTUPINFOA sui;
-   ZeroMemory(&sui, sizeof(sui));
-   sui.cb = sizeof(sui);
-   PROCESS_INFORMATION pi;
-   ZeroMemory(&sui, sizeof(sui));
-   int result = CreateProcessA("C:\\Windows\\System32\\cmd.exe", command, NULL, NULL, FALSE,
-                   0, NULL, NULL,
-                   &sui, &pi);
-   if(result == 0){
-      cout << "failed to create compilation process" << endl;
-      printError();
-      return -1;
-   }
-   WaitForSingleObject( pi.hProcess, INFINITE );
-   CloseHandle( pi.hProcess );
-   CloseHandle( pi.hThread );
-   delete[] command;
+   system(script_name.c_str());
 
    FILE *check_valid;
    if((check_valid = fopen("FuncLibrary.dll", "r")) == NULL){
