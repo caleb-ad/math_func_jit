@@ -1,5 +1,7 @@
 *.exe
 *.obj
-FuncInterp.hpp
-FuncInterp.lib
 FuncLibrary.dll
+FuncLibrary.exp
+FuncLibrary.lib
+my_func.bat
+my_func.cpp
