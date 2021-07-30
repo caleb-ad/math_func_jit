@@ -1,14 +1,5 @@
-all : main.cpp
-	cl -EHsc main.cpp
-
-dll_test.dll : dll_test.obj
-	cl -Fe:dll_test.dll dll_test.obj -link -DLL
-
-dll_test.obj : dll_test.cpp
-	cl -c -Fo:dll_test.obj -EHsc dll_test.cpp
+mfj.exe: math_func_jit.cpp
+	cl -W3 -wd4996 -EHsc -Fe:mfj.exe math_func_jit.cpp FuncInterp.lib
 
 clean:
-	rm *.dll
-	rm *.obj
-	rm *.lib
-	rm *.exp
+	rm *.dll; rm *.obj; rm *.exe; rm my_func.cpp; rm my_func.cpp.bat;

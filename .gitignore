@@ -1,2 +1,5 @@
 *.exe
 *.obj
+FuncInterp.hpp
+FuncInterp.lib
+FuncLibrary.dll
